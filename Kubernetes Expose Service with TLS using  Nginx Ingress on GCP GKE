@@ -1,4 +1,4 @@
-# Kubernetes Expose Service with TLS using  Nginx Ingress on GCP GKE
+#Kubernetes Expose Service with TLS using  Nginx Ingress on GCP GKE
 
 ## Pre-Req:
 Create Kubernetes Cluster on GCP (Google Cloud)
