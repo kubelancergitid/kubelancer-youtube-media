@@ -1,28 +1,28 @@
 #Kubernetes Expose Service with TLS using  Nginx Ingress on GCP GKE
 
-## Pre-Req:
+#Pre-Req:
 Create Kubernetes Cluster on GCP (Google Cloud)
 Follow Video How to create Cluster
-Link: 
+Link: https://youtu.be/iZZSpKktqps
 
 #Let's Start
 
-## Step 1: Install the NGINX Ingress controller
+##Step 1: Install the NGINX Ingress controller
 Link to Download: https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke
 
-## Step 2: Deploy the example application
+##Step 2: Deploy the example application
 kubectl run nginx --image=nginx --port=80 --label=app=nginx
 kubectl create service clusterip nginx --tcp=80:80
 
-## Step 3: Create records on  Domain
+##Step 3: Create records on  Domain
 Create A record on your domain manager
 
-## Step 4: Install cert-manager
+##Step 4: Install cert-manager
 Link: https://cert-manager.io/docs/installation/kubernetes/
 
-## Step 5: Configure TLS with Let's Encrypt certificates and cert-manager
+##Step 5: Configure TLS with Let's Encrypt certificates and cert-manager
 
-##### Step 5.1: Create Issuer
+####Step 5.1: Create Issuer
 
 apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
@@ -45,7 +45,7 @@ spec:
 
 
 
-##### Step 5.2: Create Ingress
+#####Step 5.2: Create Ingress
 
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -69,5 +69,4 @@ spec:
           serviceName: nginx
           servicePort: 80
 
-## Step 6: Access the service on browser https://web1.kubelancer.net
-
+##Step 6: Access the service on browser https://web1.kubelancer.net
