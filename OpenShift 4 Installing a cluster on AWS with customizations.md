@@ -1,4 +1,4 @@
-# Install OpenShift Cluster 4 on AWS Cloud
+# Install Customized OpenShift Cluster 4 on AWS Cloud
 
 ## Infrastructure:
 
