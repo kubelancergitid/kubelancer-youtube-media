@@ -9,8 +9,12 @@
 ## Accounts Sign Up
 
 If you don't already have an AWS account and Red Hat account, create it first.
+``` 
 Sign up for a Red Hat subscription. https://www.redhat.com/wapps/ugc/register.html
+```
+``` 
 Sign Up AWS account https://aws.amazon.com
+```
 
 ## Setting up jumpserver
 
@@ -41,7 +45,6 @@ ssh-add ~/.ssh/id_rsa
 
 
 ## Configure an AWS account to host your cluster
-## --------------------------------------------
 
 1. Configuring Route53
 - Amazon Web Services (AWS) account you use must have a dedicated public hosted zone in your Route53 service
@@ -68,35 +71,40 @@ Default output format [None]: json
 ```
 
 ## Obtaining the installation program
-## -----------------------------------
+
 https://cloud.redhat.com/openshift/install
 
 ## Downloads
-## ------------
+
 
 1. OpenShift installer
+
+```
 curl -O https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-install-linux.tar.gz
 tar -xvzf openshift-install-linux.tar.gz
 cp -rf openshift-install /usr/local/bin/openshift-install ; chmod +x /usr/local/bin/openshift-install
+```
 
 2. Pull secret
 Download or copy your pull secret. The install program will prompt you for your pull secret during installation.
 
 3. Command-line interface
+``` 
 curl -O https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
 tar -xvzf openshift-client-linux.tar.gz
 cp -rf oc /usr/local/bin/oc ; chmod +x /usr/local/bin/oc ; cp -rf kubectl /usr/local/bin/kubectl; chmod +x /usr/local/bin/kubectl
 
-Creating the installation configuration file
---------------------------------------------
+``` 
+## Creating the installation configuration file
+
 1. Create installation_directory [oscdir]
-mkdir ./oscdir
+``` mkdir ./oscdir ```
 
 2. Create the install-config.yaml file
-openshift-install create install-config --dir=./oscdir
+``` openshift-install create install-config --dir=./oscdir ```
 
 3. Modify the install-config.yaml file
-vi install-config.yaml
+``` vi install-config.yaml ```
 
 ```
 
@@ -139,14 +147,12 @@ platform:
 
 
 ## Deploy the cluster
-## -----------------
 
 ```
 openshift-install create cluster --dir=./oscdir  --log-level=info
 ```
 
 ## Access your cluster
-## ---------------------
 
 You can log into your cluster as a default system user by exporting the cluster kubeconfig file:
 
@@ -155,16 +161,17 @@ export KUBECONFIG=<installation_directory>/auth/kubeconfig
 ```
 
 ## Verify cluster
-## --------------
 
+```
 oc whoami
 oc cluster-info
 oc version
 oc get nodes
+```
 
 
 ## Destroy Openshift cluster
-## -----------------------
+
 
 ```
 openshift-install destroy cluster --dir=./oscdir --log-level=info
