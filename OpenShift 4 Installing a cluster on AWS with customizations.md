@@ -1,33 +1,32 @@
 Install OpenShift Cluster 4 on AWS Cloud
-##############################
 
 Infrastructure:
-----------------
+
 Openshift version: 4.3
 Cloud: AWS
 
 
 Accounts Sign Up
-----------------------
+
 If you don't already have an AWS account and Red Hat account, create it first.
 Sign up for a Red Hat subscription. https://www.redhat.com/wapps/ugc/register.html
 Sign Up AWS account https://aws.amazon.com
 
 Setting up jumpserver
-=====================
+
 
 Install the AWS CLI version 1 on Linux
----------------------------------------
 
+'
 yum install python3 -y
 python get-pip.py --user
 cp -rf .local/bin/* /usr/local/bin/
 pip3 install awscli --upgrade --user
 cp .local/bin/aws /usr/local/bin/ ; chmod +x /usr/local/bin/aws
 aws --version
-
+'
 Generating an SSH private key and adding it to the agent
--------------------------------------------------------
+
 
 ssh-keygen -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa
 eval "$(ssh-agent -s)"
@@ -50,12 +49,14 @@ Ref : https://docs.openshift.com/container-platform/4.3/installing/installing_aw
 - Attach the AdministratorAccess policy to ensure that the account has sufficient permission
 
 4. AWS Configure
+'
 [root@ip-172-31-7-245 ~]# aws configure
 AWS Access Key ID [None]: AKIAV62DSXXXXXXX
 AWS Secret Access Key [None]: AcpxFM2YVJ0XXXXXXXXX
 Default region name [None]: us-east-2
 Default output format [None]: json
 [root@ip-172-31-7-245 ~]#
+'
 
 Obtaining the installation program
 -----------------------------------
