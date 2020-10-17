@@ -2,6 +2,7 @@
 
 ## Environment:
 
+```
 Cloud: AWS
 AMI: ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server
 Instance type: t2.medium
@@ -14,6 +15,7 @@ Inbound Rules
 22	TCP	0.0.0.0/0
 8443 TCP	0.0.0.0/0
 443	TCP	0.0.0.0/0
+```
 
 ## Install Docker
 
