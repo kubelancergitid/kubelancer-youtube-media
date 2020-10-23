@@ -9,15 +9,17 @@
 
 ## Identifying an unhealthy etcd member
 
-1. Check the status of the EtcdMembersAvailable status
+      1. Check the status of the EtcdMembersAvailable status
 
 ```bash
         $ oc get etcd -o=jsonpath='{range .items[0].status.conditions[?(@.type=="EtcdMembersAvailable")]}{.message}{"\n"}'
 ```
-2. Review the output:
-        ```
+        2. Review the output:
+
+```
             2 of 3 members are available, ip-10-0-131-183.ec2.internal is unhealthy
-        ```
+```
+
 ## Determining the state of the unhealthy etcd member
 
 1. Determine if the machine is not running:
@@ -26,9 +28,9 @@
         $ oc get machines -A -ojsonpath='{range .items[*]}{@.status.nodeRef.name}{"\t"}{@.status.providerStatus.instanceState}{"\n"}' | grep -v running
 ```
         Example output
-        ```
+```
             ip-10-0-131-183.ec2.internal  stopped
-        ```
+```
 
 2. Determine if the node is not ready
 
@@ -36,9 +38,9 @@
         $ oc get nodes -o jsonpath='{range .items[*]}{"\n"}{.metadata.name}{"\t"}{range .spec.taints[*]}{.key}{" "}' | grep unreachable
 ```
         Example output
-        ```
+```
             ip-10-0-131-183.ec2.internal	node-role.kubernetes.io/master node.kubernetes.io/unreachable node.kubernetes.io/unreachable
-        ```
+```
 
 #### If the node is still reachable, then check whether the node is listed as NotReady:
 
