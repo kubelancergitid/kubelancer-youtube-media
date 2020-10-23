@@ -1,5 +1,5 @@
 # Openshift 4.5 Replacing an unhealthy etcd member
-# 
+#
 
 #### Pre-Req:
 
@@ -48,9 +48,9 @@
         $ oc get nodes -l node-role.kubernetes.io/master | grep "NotReady"
 ```
         Example output
-    ```
+```
         ip-10-0-131-183.ec2.internal   NotReady   master   122m   v1.18.3
-    ```
+```
 
 3. Determine if the etcd Pod is crashlooping.
 
@@ -62,12 +62,12 @@ Verify that all master nodes are listed as Ready:
       $ oc get nodes -l node-role.kubernetes.io/master
 ```
         Example output
-    ```
+```
         NAME                           STATUS   ROLES    AGE     VERSION
         ip-10-0-131-183.ec2.internal   Ready    master   6h13m   v1.18.3
         ip-10-0-164-97.ec2.internal    Ready    master   6h13m   v1.18.3
         ip-10-0-154-204.ec2.internal   Ready    master   6h13m   v1.18.3
-    ```
+```
 Check whether the status of an etcd Pod is either Error or CrashloopBackoff:
 ```bash
         $ oc get pods -n openshift-etcd | grep etcd
@@ -167,20 +167,20 @@ In a terminal that has access to the cluster as a cluster-admin user, run the fo
         Delete the secrets for the unhealthy etcd member that was removed.
 
         Delete the peer secret:
-        ```bash
+```bash
 
         $ oc delete secret -n openshift-etcd etcd-peer-ip-10-0-131-183.ec2.internal
-        ```
+```
         Delete the serving secret:
-        ```bash
+```bash
 
         $ oc delete secret -n openshift-etcd etcd-serving-ip-10-0-131-183.ec2.internal
-        ```
+```
         Delete the metrics secret:
-        ```bash
+```bash
 
         $ oc delete secret -n etcd-serving-metrics-ip-10-0-131-183.ec2.internal
-        ```
+```
         Delete and recreate the master machine. After this machine is recreated, a new revision is forced and etcd scales up automatically.
 
 
@@ -194,29 +194,29 @@ In a terminal that has access to the cluster as a cluster-admin user, run the fo
         Debug the node that is crashlooping.
 
         In a terminal that has access to the cluster as a cluster-admin user, run the following command:
-        ```bash
+```bash
 
         $ oc debug node/ip-10-0-131-183.ec2.internal
-        ```
+```
         	Replace this with the name of the unhealthy node.
 
         Change your root directory to the host:
-        ```bash
+```bash
 
         sh-4.2# chroot /host
-        ```
+```
         Move the existing etcd Pod file out of the kubelet manifest directory:
-        ```bash
+```bash
 
         sh-4.2# mkdir /var/lib/etcd-backup
 
         sh-4.2# mv /etc/kubernetes/manifests/etcd-pod.yaml /var/lib/etcd-backup/
-        ```
+```
         Move the etcd data directory to a different location:
-        ```bash
+```bash
 
         sh-4.2# mv /var/lib/etcd/ /tmp
-        ```
+```
         You can now exit the node shell.
 
     Remove the unhealthy member.
@@ -224,12 +224,12 @@ In a terminal that has access to the cluster as a cluster-admin user, run the fo
         Choose a Pod that is not on the affected node.
 
         In a terminal that has access to the cluster as a cluster-admin user, run the following command:
-        ```bash
+```bash
 
         $ oc get pods -n openshift-etcd | grep etcd
-        ```
+```
         Example output
-````
+```
         etcd-ip-10-0-131-183.ec2.internal                2/3     Error       7          6h9m
         etcd-ip-10-0-164-97.ec2.internal                 3/3     Running     0          6h6m
         etcd-ip-10-0-154-204.ec2.internal                3/3     Running     0          6h6m
@@ -237,15 +237,15 @@ In a terminal that has access to the cluster as a cluster-admin user, run the fo
         Connect to the running etcd container, passing in the name of a Pod that is not on the affected node.
 
         In a terminal that has access to the cluster as a cluster-admin user, run the following command:
-        ```bash
+```bash
 
         $ oc rsh -n openshift-etcd etcd-ip-10-0-154-204.ec2.internal
-        ```
+```
         View the member list:
-        ```bash
+```bash
 
         sh-4.2# etcdctl member list -w table
-        ```
+```
         Example output
 ```
         +------------------+---------+------------------------------+---------------------------+---------------------------+
@@ -259,7 +259,7 @@ In a terminal that has access to the cluster as a cluster-admin user, run the fo
         Take note of the ID and the name of the unhealthy etcd member, because these values are needed later in the procedure.
 
         Remove the unhealthy etcd member by providing the ID to the etcdctl member remove command:
-        ```bash
+```bash
 
         sh-4.2# etcdctl member remove 62bcf33650a7170a
 ```
@@ -268,7 +268,7 @@ In a terminal that has access to the cluster as a cluster-admin user, run the fo
         Member 62bcf33650a7170a removed from cluster ead669ce1fbfb346
 ```
         View the member list again and verify that the member was removed:
-        ```bash
+```bash
 
         sh-4.2# etcdctl member list -w table
 ```
@@ -286,7 +286,7 @@ In a terminal that has access to the cluster as a cluster-admin user, run the fo
     Remove the old secrets for the unhealthy etcd member that was removed.
 
         List the secrets for the unhealthy etcd member that was removed.
-        ```bash
+```bash
 
         $ oc get secrets -n openshift-etcd | grep ip-10-0-131-183.ec2.internal
 ```
@@ -302,24 +302,24 @@ In a terminal that has access to the cluster as a cluster-admin user, run the fo
         Delete the secrets for the unhealthy etcd member that was removed.
 
             Delete the peer secret:
-            ```bash
+```bash
 
             $ oc delete secret -n openshift-etcd etcd-peer-ip-10-0-131-183.ec2.internal
 ```
             Delete the serving secret:
-            ```bash
+```bash
 
             $ oc delete secret -n openshift-etcd etcd-serving-ip-10-0-131-183.ec2.internal
 ```
             Delete the metrics secret:
-            ```bash
+```bash
 
             $ oc delete secret -n etcd-serving-metrics-ip-10-0-131-183.ec2.internal
 ```
     Force etcd redeployment.
 
     In a terminal that has access to the cluster as a cluster-admin user, run the following command:
-    ```bash
+```bash
 
     $ oc patch etcd cluster -p='{"spec": {"forceRedeploymentReason": "single-master-recovery-'"$( date --rfc-3339=ns )"'"}}' --type=merge
 ```
@@ -332,12 +332,12 @@ In a terminal that has access to the cluster as a cluster-admin user, run the fo
         Connect to the running etcd container again.
 
         In a terminal that has access to the cluster as a cluster-admin user, run the following command:
-        ```bash
+```bash
 
         $ oc rsh -n openshift-etcd etcd-ip-10-0-154-204.ec2.internal
 ```
         Verify that all members are healthy:
-        ```bash
+```bash
 
         sh-4.2# etcdctl endpoint health --cluster
 ```
